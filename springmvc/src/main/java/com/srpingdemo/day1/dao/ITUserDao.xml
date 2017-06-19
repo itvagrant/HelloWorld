@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.srpingdemo.day1.dao.ITUserDao">
+	<select id="findRoles" parameterType="string" resultType="string">
+		select rolename from t_role r 
+			left outer join t_user u 
+				on r.id=u.roleid 
+			where username=#{username}
+	</select>
+	
+	<select id="findPermissions" parameterType="string" resultType="string">
+		select permissionname from t_permission p 
+			left outer join t_user u 
+				on p.roleid=u.roleid 
+			where username=#{username}
+	</select>
+	
+</mapper>

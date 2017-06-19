@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- Spring在扫描的时候，不要扫描Controller和RestController。 -->
+	<context:component-scan base-package="com.srpingdemo.day1" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+	</context:component-scan>
+	
+	<!-- 导入resources资源下的srping-dao.xml和service -->
+	<import resource="classpath:spring/spring-dao.xml"/>
+	<import resource="classpath:spring/spring-service.xml"/>
+	
+	<!-- Spring异常处理 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<!-- name值：（参看SimpleMappingExceptionResolver源码）
+			exceptionMappings
+		 -->
+		<!-- 在找不到配置的异常的情况下，用该默认的异常视图 -->
+		<!-- <property name="defaultErrorView" value="errors/error01"></property> -->
+		<!-- 配置具体的异常对应的错误视图 -->
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.NullPointerException">errors/error02</prop>
+			</props>
+		</property>
+		
+	</bean>
+	
+	<!-- AOP的配置 -->
+	
+	<!-- 注解配置的时候使用： -->
+	<aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>
+	
+		<!-- 定义切面的bean信息 -->
+	<!-- <bean class="com.srpingdemo.day1.aspect.MyAspect" id="myaspect"/> -->
+		<!-- aop切面的配置 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.srpingdemo.day1.service.*.*(..))" id="pointcut"/>
+		<!-- <aop:aspect ref="myaspect">
+			<aop:before method="doBefore" pointcut-ref="pointcut"/>
+			<aop:after method="doAfter" pointcut-ref="pointcut"/>
+			<aop:after-returning method="doAfterReturning" pointcut-ref="pointcut"/>
+			<aop:after-throwing method="doAfterThrowing" pointcut-ref="pointcut"/>
+			<aop:around method="doAround" pointcut-ref="pointcut"/>
+		</aop:aspect> -->
+	</aop:config>
+	
+</beans>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<!-- 配置contextConfigLocation参数，用于指定Spring的配置文件路径 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<!-- 该监听器用于加载Spring的配置文件 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Processes application requests -->
+	<!-- 
+		SpringMvc前端控制器 Front Controller
+		不需要我们自己创建前端分发控制器，直接用框架提供的
+	 -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 配置contextConfigLocation初始化参数,用于指定SpringMvc配置文件路径 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+		<!-- 
+			Servlet容器启动的时候即时加载DispatcherServlet，完成前端控制器的创建和初始化. 
+			为基于SpringMvc框架的应用的运行提供相应的环境或条件.
+		-->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- 前端控制器拦截根目录下所有请求 -->
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 配置框架提供的编码过滤器，就不需要我们自己写过滤器配置了 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<!-- 针对request的请求编码设置 -->
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<!-- 针对response的响应编码设置 -->
+		<init-param> 
+	        <param-name>forceEncoding</param-name>
+	        <param-value>true</param-value>
+    	</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 
+		如果我们的提交请求中有一个名称为_method的请求参数：
+		如果_method="PUT",请求的URL为：http://localhost:8080/springmvcdemo01/rest/user,
+		那么就可以向@RequestMapping(value="/user",method=RequestMethod.PUT)注解的方法发起的正确的请求。
+	 -->
+	<filter>
+		<filter-name>hiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>hiddenHttpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	
+</web-app>

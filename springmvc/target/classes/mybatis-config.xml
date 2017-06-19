@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- 允许 JDBC 支持自动生成主键，强制使用自动生成主键 -->
+		<setting name="useGeneratedKeys" value="true"/>
+	</settings>
+	<typeAliases>
+		<package name="com.srpingdemo.day1.entity"/>
+	</typeAliases>
+	<mappers>
+		<package name="com.srpingdemo.day1.dao"/>
+		<!-- <mapper resource="daomappers/UserDaoMapper.xml"/> -->
+	</mappers>
+</configuration>
